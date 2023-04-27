@@ -25,11 +25,13 @@ def gen_Playlist():
             track_artist = song.artist
             for path in Path(f"../rock/{track_artist}").rglob("*.[mf][4l][a]*"):
                 tag = TinyTag.get(path)
-                album = str.lower(tag.album)
+                tag_Album = str.lower(tag.album)
+                tag_Artist = str.lower(tag.artist)
+                tr_Artist = str.lower(track_artist)
                 if (
-                    str.lower(track_artist) == str.lower(tag.artist)
+                    tag_Artist in tr_Artist
                     and str.lower(track_title) == str.lower(tag.title)
-                    and album.__contains__("live") == False
+                    and tag_Album.__contains__("live") == False
                 ):
                     print(path)
                     raw_src = str(path)
