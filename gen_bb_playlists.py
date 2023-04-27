@@ -12,8 +12,8 @@ c_Ident = [
 ]
 
 
-def gen_Playlist():
-""" cycling through gathering the billboard chart from the web to parse """
+def gen_Playlist():  
+    """ cycling through gathering the billboard chart from the web to parse """
     for chart in c_Ident:
         print(chart)
         which_Chart = chart
@@ -39,9 +39,8 @@ def gen_Playlist():
                     print(path)
                     raw_src = str(path)
                     src = raw_src.replace(" ", "\ ")
-                    """ writing the relative path of the file to an .m3u
-                    playlist """
                     pl.write(raw_src + "\n")
 
 
-gen_Playlist()
+if __name__ == '__main__':
+    gen_Playlist()
