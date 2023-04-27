@@ -5,7 +5,12 @@ from billboard import ChartData
 from tinytag import TinyTag
 from pathlib import Path
 
-c_Ident = ["greatest-billboards-top-songs-80s", "greatest-billboards-top-songs-90s", "greatest-of-all-time-mainstream-rock-songs"]
+c_Ident = [
+    "greatest-billboards-top-songs-80s",
+    "greatest-billboards-top-songs-90s",
+    "greatest-of-all-time-mainstream-rock-songs",
+]
+
 
 def gen_Playlist():
     for chart in c_Ident:
@@ -18,9 +23,7 @@ def gen_Playlist():
             song = the_Chart[track]
             track_title = song.title
             track_artist = song.artist
-            for path in Path(f"../rock/{track_artist}").rglob(
-                "*.[mf][4l][a]*"
-            ):
+            for path in Path(f"../rock/{track_artist}").rglob("*.[mf][4l][a]*"):
                 tag = TinyTag.get(path)
                 album = str.lower(tag.album)
                 if (
@@ -32,5 +35,6 @@ def gen_Playlist():
                     raw_src = str(path)
                     src = raw_src.replace(" ", "\ ")
                     pl.write(raw_src + "\n")
+
 
 gen_Playlist()
