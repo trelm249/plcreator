@@ -13,8 +13,8 @@ c_Ident = [
 ]
 
 
-def gen_chart(in_Chart):  
-    """ cycling through gathering the billboard chart from the web to parse """
+def gen_chart(in_Chart):
+    """cycling through gathering the billboard chart from the web to parse"""
     chart = in_Chart
     print(chart)
     which_Chart = chart
@@ -27,7 +27,15 @@ def gen_chart(in_Chart):
         song = the_Chart[track]
         track_title = song.title
         track_artist = song.artist
-        for path in Path("../rock/").rglob("*.[mf][4l][a]*"):
+        """ remove 80s compilation albums from non 80s chart searches 
+            Also limit searches to m4a and flac files """
+        if "80s" in chart:
+            search_Path = Path("../rock/").rglob("*.[mf][4l][a]*")
+        else:
+            search_Path = Path(f"../rock/{track_artist}/").rglob(
+                "*.[mf][4l][a]*"
+            )
+        for path in search_Path:
             tag = TinyTag.get(path)
             tag_Album = str.lower(tag.album)
             tag_Artist = str.lower(tag.artist)
@@ -41,9 +49,12 @@ def gen_chart(in_Chart):
                 raw_src = str(path)
                 src = raw_src.replace(" ", "\ ")
                 pl.write(raw_src + "\n")
+                """ insert a break to quit and prevent duplicate songs in the
+                playlists """
+                break
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pool = ThreadPool(4)
     results = pool.map(gen_chart, c_Ident)
     results = []
