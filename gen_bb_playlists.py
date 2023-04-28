@@ -27,7 +27,7 @@ def gen_chart(in_Chart):
         song = the_Chart[track]
         track_title = song.title
         track_artist = song.artist
-        """ remove 80s compilation albums from non 80s chart searches 
+        """ remove 80s compilation albums from non 80s chart searches
             Also limit searches to m4a and flac files """
         if "80s" in chart:
             search_Path = Path("../rock/").rglob("*.[mf][4l][a]*")
@@ -43,11 +43,10 @@ def gen_chart(in_Chart):
             if (
                 tag_Artist in tr_Artist
                 and str.lower(track_title) == str.lower(tag.title)
-                and tag_Album.__contains__("live") == False
+                and tag_Album.__contains__("live") is False
             ):
                 print(path)
                 raw_src = str(path)
-                src = raw_src.replace(" ", "\ ")
                 pl.write(raw_src + "\n")
                 """ insert a break to quit and prevent duplicate songs in the
                 playlists """
