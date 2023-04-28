@@ -13,21 +13,12 @@ c_Ident = [
 ]
 
 
-def gen_chart(in_Chart):
-    """cycling through gathering the billboard chart from the web to parse"""
-    print(in_Chart)
-    the_Chart = ChartData(in_Chart)
-    print(the_Chart.title)
-    pl = open(f"{in_Chart}.m3u", "a", encoding="utf-8")
-    """ Now searching through the filesystem under ../rock/ for songs that
-        are in the chart """
-    for track in range(len(the_Chart)):
-        song = the_Chart[track]
+def find_Tracks(a_Chart, chart_Name, pl):
+    for track in range(len(a_Chart)):
+        song = a_Chart[track]
         track_title = song.title
         track_artist = song.artist
-        """ remove 80s compilation albums from non 80s chart searches
-            Also limit searches to m4a and flac files """
-        if "80s" in in_Chart:
+        if "80s" in chart_Name:
             search_Path = Path("../rock/").rglob("*.[mf][4l][a]*")
         else:
             search_Path = Path(f"../rock/{track_artist}/").rglob(
@@ -44,16 +35,21 @@ def gen_chart(in_Chart):
                 and "live" not in tag_Album
             ):
                 print(path)
-                raw_src = str(path)
-                pl.write(raw_src + "\n")
-                """ insert a break to quit and prevent duplicate songs in the
-                playlists """
+                tr_path = str(path) + "\n"
+                pl.write(tr_path)
                 break
 
+def gen_chart(in_Chart):
+    """cycling through gathering the billboard chart from the web to parse"""
+    print(in_Chart)
+    the_Chart = ChartData(in_Chart)
+    print(the_Chart.title)
+    pl = open(f"{in_Chart}.m3u", "a", encoding="utf-8")
+    find_Tracks(the_Chart, in_Chart, pl)
 
 if __name__ == "__main__":
-    pool = ThreadPool(4)
-    results = pool.map(gen_chart, c_Ident)
+    mpool = ThreadPool(4)
+    results = mpool.map(gen_chart, c_Ident)
     results = []
     for in_Chart in c_Ident:
-        results.append(pool.apply_async(gen_chart(in_Chart)))
+        results.append(mpool.apply_async(gen_chart(in_Chart)))
