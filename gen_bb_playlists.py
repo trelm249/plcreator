@@ -41,7 +41,7 @@ def gen_chart(in_Chart):
             if (
                 tag_Artist in tr_Artist
                 and str.lower(track_title) == str.lower(tag.title)
-                and tag_Album.__contains__("live") is False
+                and "live" not in tag_Album
             ):
                 print(path)
                 raw_src = str(path)
