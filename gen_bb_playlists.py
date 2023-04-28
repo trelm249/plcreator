@@ -15,12 +15,10 @@ c_Ident = [
 
 def gen_chart(in_Chart):
     """cycling through gathering the billboard chart from the web to parse"""
-    chart = in_Chart
-    print(chart)
-    which_Chart = chart
-    the_Chart = ChartData(which_Chart)
+    print(in_Chart)
+    the_Chart = ChartData(in_Chart)
     print(the_Chart.title)
-    pl = open(f"{which_Chart}.m3u", "a", encoding="utf-8")
+    pl = open(f"{in_Chart}.m3u", "a", encoding="utf-8")
     """ Now searching through the filesystem under ../rock/ for songs that
         are in the chart """
     for track in range(len(the_Chart)):
@@ -29,7 +27,7 @@ def gen_chart(in_Chart):
         track_artist = song.artist
         """ remove 80s compilation albums from non 80s chart searches
             Also limit searches to m4a and flac files """
-        if "80s" in chart:
+        if "80s" in in_Chart:
             search_Path = Path("../rock/").rglob("*.[mf][4l][a]*")
         else:
             search_Path = Path(f"../rock/{track_artist}/").rglob(
