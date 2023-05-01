@@ -19,7 +19,7 @@ def gen_chart(in_Chart):
     the_Chart = ChartData(in_Chart)
     print(the_Chart.title)
     pl = open(f"{in_Chart}.m3u", "a", encoding="utf-8")
-    with ThreadPoolExecutor(max_workers=4) as tpe:
+    with ThreadPoolExecutor(max_workers=16) as tpe:
         for track in range(len(the_Chart)):
             song = the_Chart[track]
             track_title = song.title
@@ -45,7 +45,7 @@ def gen_chart(in_Chart):
                     break
 
 if __name__ == "__main__":
-    mpool = Pool(16)
+    mpool = Pool(4)
     results = mpool.map(gen_chart, c_Ident)
     results = []
     for in_Chart in c_Ident:
