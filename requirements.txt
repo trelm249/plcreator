@@ -2,4 +2,3 @@ pathlib
 tinytag
 billboard.py
 multiprocessing
-concurreny.futures
