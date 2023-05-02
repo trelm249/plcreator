@@ -14,3 +14,7 @@
 > The script is run in your playlists directory and uses relative paths to build the playlists. The assumption is playlists is at the same tier as rock in the filesystem.
 
 invoke with `python gen_bb_playlists.py`
+
+## Roadmap
+- add working multithreading to track path search
+- create a list of dictionaries for track path and metatags to search rather than parse the file system multiple times
