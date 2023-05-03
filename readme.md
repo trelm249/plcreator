@@ -2,7 +2,7 @@
 > A python script to generate a playlist from a few of the Billboard charts.
 
 ## purpose
-> This will generate an m3u file to create a playlist based on Billboard charts.
+> This will generate an m3u file to create a playlist using relative paths based on Billboard charts. The idea is that the playlist reside in a playlist folder relative to the track files. This is for portability to mobile media and rsynced libraries.
 
 ## Charts referenced
 
@@ -17,4 +17,3 @@ invoke with `python gen_bb_playlists.py`
 
 ## Roadmap
 - add working multithreading to track path search
-- create a list of dictionaries for track path and metatags to search rather than parse the file system multiple times
