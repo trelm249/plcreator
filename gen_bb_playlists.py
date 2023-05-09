@@ -2,7 +2,6 @@
 get billboard playlist
 """
 from pathlib import Path
-from multiprocessing import Pool
 from billboard import ChartData
 from tinytag import TinyTag
 
@@ -34,7 +33,7 @@ def gen_chart(in_chart):
         file_array.append(
             {
                 "f_path": f_path,
-                "tag_tile": tag_title,
+                "tag_title": tag_title,
                 "tag_artist": tag_artist,
                 "tag_album": tag_album,
             }
@@ -49,7 +48,7 @@ def gen_chart(in_chart):
             """ exclude live albums """
             if (
                 tr_path["tag_artist"] in tr_artist
-                and str.lower(track_title) == tr_path["tag_tile"]
+                and str.lower(track_title) in tr_path["tag_title"]
                 and "live" not in tr_path["tag_album"]
             ):
                 """write the relative track path to the playlist"""
@@ -58,9 +57,5 @@ def gen_chart(in_chart):
 
 
 if __name__ == "__main__":
-    """spawn processes for each chart"""
-    mpool = Pool()
-    results = mpool.map(gen_chart, c_Ident)
-    results = []
     for in_Chart in c_Ident:
-        results.append(mpool.apply_async(gen_chart(in_Chart)))
+        (gen_chart(in_Chart))
