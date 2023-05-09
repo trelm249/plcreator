@@ -13,7 +13,7 @@ def unique_rock_tracks_generator():
         cdate = chart.date
         date_format = "%Y-%m-%d"
         dtObj = datetime.strptime(cdate, date_format)
-        n = 10
+        n = 7
         previous_Date = dtObj - timedelta(days=n)
         top_track = chart[0]
         duplicate = top_track.title in red_tracks
