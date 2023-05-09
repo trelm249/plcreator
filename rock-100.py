@@ -23,5 +23,8 @@ def unique_rock_tracks_generator():
     raise StopIteration
 
 
+this_playlist = open("rock_100.m3u", "a", encoding="utf-8")
 for track in unique_rock_tracks_generator():
     print(track)
+    this_playlist.write(str(track) + "\n")
+this_playlist.close()
