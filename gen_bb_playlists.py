@@ -4,6 +4,8 @@ get billboard playlist
 from pathlib import Path
 from billboard import ChartData
 from tinytag import TinyTag
+import multiprocessing
+import time
 
 
 # Define Charts Identifiers
@@ -12,6 +14,8 @@ c_Ident = [
     "greatest-billboards-top-songs-90s",
     "greatest-of-all-time-mainstream-rock-songs",
     "greatest-alternative-songs",
+    "greatest-country-songs",
+    "jazz-songs",
 ]
 
 
@@ -23,8 +27,13 @@ def gen_chart(in_chart):
     this_playlist = open(f"{in_chart}.m3u", "a", encoding="utf-8")
     """ iterate and find track paths for the playlist and store in an array to
     query iteratively"""
-    search_path = Path("../rock/").rglob("*.[mf][4l][a]*")
     file_array = []
+    if "country" in in_chart:
+        search_path = Path("../Country/").rglob("*.[mf][4l][a]*")
+    elif "jazz" in in_chart:
+        search_path = Path("../Jazz/").rglob("*.[mf][4l][a]*")
+    else:
+        search_path = Path("../rock/").rglob("*.[mf][4l][a]*")
     for f_path in search_path:
         tag = TinyTag.get(f_path)
         tag_album = str.lower(tag.album)
@@ -57,5 +66,14 @@ def gen_chart(in_chart):
 
 
 if __name__ == "__main__":
-    for in_Chart in c_Ident:
-        (gen_chart(in_Chart))
+    start = time.perf_counter()
+    processes = [
+        multiprocessing.Process(target=gen_chart, args=[in_Chart])
+        for in_Chart in c_Ident
+    ]
+    for process in processes:
+        process.start()
+    for process in processes:
+        process.join()
+    finish = time.perf_counter()
+    print(f"It took {finish-start: .2f} second(s) to finish")
