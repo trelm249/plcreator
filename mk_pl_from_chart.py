@@ -1,12 +1,12 @@
 """ generate a playlist of the billboard hot 100 of the 70s """
 from pathlib import Path
 from tinytag import TinyTag
+from os import listdir
 import time
 
 start = time.perf_counter()
-current_chart = "greatest-songs-of-the-70s"
 
-this_playlist = open(f"{current_chart}.m3u", "a", encoding="utf-8")
+#this_playlist = open(f"{current_chart}.m3u", "a", encoding="utf-8")
 
 """ build the local tracks dictionary """
 file_array = []
@@ -25,6 +25,13 @@ for f_path in search_path:
         }
     )
 """ iterate through the chart file """
+chart_list = listdir(Path.home().joinpath('plcharts'))
+print(chart_list)
+
+for item in chart_list:
+   chart = item[:-4]
+   print(chart)
+"""
 with open("greatest-songs-of-the-70s.csv", "r") as source_file:
     for line in source_file:
         line_split = line.split(",")
@@ -38,6 +45,6 @@ with open("greatest-songs-of-the-70s.csv", "r") as source_file:
             ):
                 this_playlist.write(str(tr_path["f_path"]) + "\n")
                 break
-
+"""
 finish = time.perf_counter()
 print(f"It took {finish-start: .2f} second(s) to finish.")
