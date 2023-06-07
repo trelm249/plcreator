@@ -23,10 +23,8 @@ def gen_chart(in_chart):
     print(in_chart)
     the_chart = ChartData(in_chart)
     print(the_chart.title)
-    chart_file = Path.home().joinpath('plcharts', f"{in_chart}.csv")
+    chart_file = Path.home().joinpath('plcharts', f"bb-{in_chart}.csv")
     this_playlist = open(chart_file, "a", encoding="utf-8")
-    """ iterate and find track paths for the playlist and store in an array to
-    query iteratively"""
     for track in range(len(the_chart)):
         song = the_chart[track]
         track_title = song.title
