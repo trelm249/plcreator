@@ -12,18 +12,25 @@ chart_list = listdir(Path.home().joinpath('plcharts'))
 file_array = []
 search_path = Path("../").rglob("*.[mf][4l][a]*")
 for f_path in search_path:
-    tag = TinyTag.get(f_path)
-    tag_album = str.lower(tag.album)
-    tag_artist = str.lower(tag.artist)
-    tag_title = str.lower(tag.title)
-    file_array.append(
-        {
-            "f_path": f_path,
-            "tag_title": tag_title,
-            "tag_artist": tag_artist,
-            "tag_album": tag_album,
-        }
-    )
+    if (
+        "Iron Maiden-A Real" not in str(f_path)
+        or "Iron Maiden-Live" not in str(f_path)
+        or "Ozzy Osbourne-Tribute" not in str(f_path)
+        or "Demo" not in str(f_path)
+        or "Mix" not in str(f_path)
+       ):
+        tag = TinyTag.get(f_path)
+        tag_album = str.lower(tag.album)
+        tag_artist = str.lower(tag.artist)
+        tag_title = str.lower(tag.title)
+        file_array.append(
+            {
+                "f_path": f_path,
+                "tag_title": tag_title,
+                "tag_artist": tag_artist,
+                "tag_album": tag_album,
+            }
+        )
 
 def gen_pl(item):
     chart = item[:-4]
