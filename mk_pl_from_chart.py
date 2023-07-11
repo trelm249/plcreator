@@ -14,10 +14,11 @@ search_path = Path("../").rglob("*.[mf][4l][a]*")
 for f_path in search_path:
     if (
         "Iron Maiden-A Real" not in str(f_path)
-        or "Iron Maiden-Live" not in str(f_path)
-        or "Ozzy Osbourne-Tribute" not in str(f_path)
-        or "Demo" not in str(f_path)
-        or "Mix" not in str(f_path)
+        and "Iron Maiden-Live" not in str(f_path)
+        and "Classical Conspiracy" not in str(f_path)
+        and "Ozzy Osbourne-Tribute" not in str(f_path)
+        and "Demo" not in str(f_path)
+        and "Mix" not in str(f_path)
        ):
         tag = TinyTag.get(f_path)
         tag_album = str.lower(tag.album)
