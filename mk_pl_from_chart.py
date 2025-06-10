@@ -6,6 +6,7 @@ import multiprocessing
 import time
 
 
+start = time.perf_counter()
 chart_list = listdir(Path.home().joinpath('plcharts'))
 
 """ build the local tracks dictionary """
@@ -16,11 +17,17 @@ for f_path in search_path:
         "Iron Maiden-A Real" not in str(f_path)
         and "Iron Maiden-Live" not in str(f_path)
         and "Classical Conspiracy" not in str(f_path)
+        and "Instrumental" not in str(f_path)
         and "Ozzy Osbourne-Tribute" not in str(f_path)
+        and "Magnification" not in str(f_path)
+        and "Disc 2 - Live" not in str(f_path)
         and "Demo" not in str(f_path)
         and "Mix" not in str(f_path)
+        and "Perception-" not in str(f_path)
+        and "-We." not in str(f_path)
+        and "game-ost" not in str(f_path)
        ):
-        tag = TinyTag.get(f_path)
+        tag = TinyTag.get(str(f_path))
         tag_album = str.lower(tag.album)
         tag_artist = str.lower(tag.artist)
         tag_title = str.lower(tag.title)
@@ -37,6 +44,7 @@ def gen_pl(item):
     chart = item[:-4]
     print(chart)
     global file_array
+    file_array.reverse()
     chart_file = (Path.home().joinpath('plcharts', item))
     this_playlist = open(f"{chart}.m3u", "a", encoding="utf-8")
     with open(chart_file, "r") as source_file:
@@ -55,7 +63,6 @@ def gen_pl(item):
 
 
 if __name__ == "__main__":
-    start = time.perf_counter()
     for item in chart_list:
         gen_pl(item)
     finish = time.perf_counter()
