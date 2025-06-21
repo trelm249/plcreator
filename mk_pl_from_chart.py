@@ -25,6 +25,10 @@ for f_path in search_path:
         and "Mix" not in str(f_path)
         and "Perception-" not in str(f_path)
         and "-We." not in str(f_path)
+        and "Live B-" not in str(f_path)
+        and "Live At " not in str(f_path)
+        and "Live On King " not in str(f_path)
+        and "Intermission -" not in str(f_path)
         and "game-ost" not in str(f_path)
        ):
         tag = TinyTag.get(str(f_path))
