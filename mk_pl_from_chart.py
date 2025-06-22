@@ -29,6 +29,10 @@ for f_path in search_path:
         and "Live At " not in str(f_path)
         and "Live On King " not in str(f_path)
         and "Intermission -" not in str(f_path)
+        and "Evil-2-" not in str(f_path)
+        and "Evil-02-" not in str(f_path)
+        and "Heart-02-" not in str(f_path)
+        and "Line-02-" not in str(f_path)
         and "game-ost" not in str(f_path)
        ):
         tag = TinyTag.get(str(f_path))
