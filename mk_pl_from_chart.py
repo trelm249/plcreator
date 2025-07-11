@@ -64,7 +64,7 @@ def gen_pl(item):
                 if (
                     tr_path["tag_artist"] in line_artist
                     and tr_path["tag_title"] in line_title
-                    and "live" not in tr_path["tag_album"]
+                    and " live " not in tr_path["tag_album"]
                 ):
                     this_playlist.write(str(tr_path["f_path"]) + "\n")
                     break
