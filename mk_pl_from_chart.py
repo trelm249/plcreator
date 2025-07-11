@@ -11,9 +11,42 @@ chart_list = listdir(Path.home().joinpath('plcharts'))
 
 """ build the local tracks dictionary """
 file_array = []
+bb_array = []
+gh_array = []
 search_path = Path("../").rglob("*.[mf][4l][a]*")
 for f_path in search_path:
     if (
+        "Billboard Hits" in str(f_path)
+       ):
+        tag = TinyTag.get(str(f_path))
+        tag_album = str.lower(tag.album)
+        tag_artist = str.lower(tag.artist)
+        tag_title = str.lower(tag.title)
+        bb_array.append(
+            {
+                "f_path": f_path,
+                "tag_title": tag_title,
+                "tag_artist": tag_artist,
+                "tag_album": tag_album,
+            }
+        )
+    elif (
+        "The Best of " in str(f_path)
+        and "Greatest Hits" in str(f_path)
+       ):
+        tag = TinyTag.get(str(f_path))
+        tag_album = str.lower(tag.album)
+        tag_artist = str.lower(tag.artist)
+        tag_title = str.lower(tag.title)
+        gh_array.append(
+            {
+                "f_path": f_path,
+                "tag_title": tag_title,
+                "tag_artist": tag_artist,
+                "tag_album": tag_album,
+            }
+        )    
+    elif (
         "Iron Maiden-A Real" not in str(f_path)
         and "Iron Maiden-Live" not in str(f_path)
         and "Classical Conspiracy" not in str(f_path)
