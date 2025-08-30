@@ -50,7 +50,7 @@ def process_file(f_path: Path):
         if any(p in path_str for p in EXCLUSION_PATTERNS):
             return None
 
-        tag = TinyTag.get(path_str, ignore_errors=True)
+        tag = TinyTag.get(path_str)
         # 2. Ensure essential tags exist
         if not tag.artist or not tag.title:
             return None
