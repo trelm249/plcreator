@@ -1,4 +1,4 @@
-""" generate a playlist of the billboard hot 100 of the 70s """
+""" generate music playlists from the music library """
 from pathlib import Path
 from tinytag import TinyTag
 from os import listdir
@@ -84,8 +84,7 @@ for f_path in search_path:
 def gen_pl(item):
     chart = item[:-4]
     print(chart)
-    global file_array
-    file_array.reverse()
+    global lib_array
     chart_file = (Path.home().joinpath('plcharts', item))
     this_playlist = open(f"{chart}.m3u", "a", encoding="utf-8")
     with open(chart_file, "r") as source_file:
@@ -93,7 +92,7 @@ def gen_pl(item):
             line_split = line.split(",")
             line_artist = str.lower(line_split[0])
             line_title = str.lower(line_split[1])
-            for tr_path in file_array:
+            for tr_path in lib_array:
                 if (
                     tr_path["tag_artist"] in line_artist
                     and tr_path["tag_title"] in line_title
@@ -104,6 +103,7 @@ def gen_pl(item):
 
 
 if __name__ == "__main__":
+    lib_array = file_array | gh_array | bb_array
     for item in chart_list:
         gen_pl(item)
     finish = time.perf_counter()
