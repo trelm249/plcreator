@@ -84,7 +84,7 @@ for f_path in search_path:
 def gen_pl(item):
     chart = item[:-4]
     print(chart)
-    global lib_array
+    global file_array
     chart_file = (Path.home().joinpath('plcharts', item))
     this_playlist = open(f"{chart}.m3u", "a", encoding="utf-8")
     with open(chart_file, "r") as source_file:
@@ -103,7 +103,7 @@ def gen_pl(item):
 
 
 if __name__ == "__main__":
-    lib_array = file_array | gh_array | bb_array
+    file_array.extend(gh_array).extend(bb_array)
     for item in chart_list:
         gen_pl(item)
     finish = time.perf_counter()
