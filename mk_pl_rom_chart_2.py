@@ -33,7 +33,7 @@ def get_album_priority(album_name: str) -> int:
     - 2: Billboard Hits
     """
     lower_album = album_name.lower()
-    if 'billboard hits' in lower_album:
+    if 'billboard ' in lower_album:
         return 2
     if 'greatest hits' in lower_album or 'best of' in lower_album:
         return 1
