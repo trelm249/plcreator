@@ -1,5 +1,5 @@
 """
-generate music playlists from the music library (Optimized Version for CSV with Album Priority)
+generate music playlists from the music library (Output to CWD)
 """
 import time
 from pathlib import Path
@@ -13,6 +13,8 @@ import csv
 MUSIC_ROOT = Path("../")
 # Set the directory containing your chart files (e.g., .csv files)
 CHART_DIR = Path.home().joinpath('plcharts')
+# MODIFIED: Set the output directory to the current working directory
+OUTPUT_DIR = Path.cwd() 
 # Add any part of a path you want to exclude from the library scan
 # Using a set is faster for lookups.
 EXCLUSION_PATTERNS = {
@@ -59,7 +61,7 @@ def process_file(f_path: Path):
             "artist": str.lower(tag.artist),
             "title": str.lower(tag.title),
             "album": album,
-            "priority": get_album_priority(album) # MODIFIED: Add priority score
+            "priority": get_album_priority(album)
         }
     except Exception:
         # Gracefully handle any errors from TinyTag or file system
@@ -83,14 +85,10 @@ def build_music_lookup(root_path: Path):
         if track_data:
             key = (track_data["artist"], track_data["title"])
             
-            # --- MODIFIED: Prioritization Logic ---
-            # If we've already stored this song, check if the new one is better
             if key in music_lookup:
-                # If the new track has a lower (better) priority, replace the old one
                 if track_data["priority"] < music_lookup[key]["priority"]:
                     music_lookup[key] = track_data
             else:
-                # If it's a new song, just add it
                 music_lookup[key] = track_data
 
     return music_lookup
@@ -101,7 +99,8 @@ def generate_playlist(args):
     """
     chart_path, music_lookup = args
     playlist_name = chart_path.stem
-    playlist_file_path = CHART_DIR / f"{playlist_name}.m3u"
+    # MODIFIED: Use the OUTPUT_DIR for the playlist file path
+    playlist_file_path = OUTPUT_DIR / f"{playlist_name}.m3u" 
     
     sys.stdout.write(f"🎧 Generating playlist: {playlist_name}.m3u\n")
     
@@ -138,8 +137,12 @@ def main():
     
     chart_files = list(CHART_DIR.glob('*.csv'))
     if not chart_files:
-        print("No chart files (.csv) found in the specified directory. Exiting.")
+        print(f"No chart files (.csv) found in {CHART_DIR}. Exiting.")
         return
+
+    # Create the output directory if it doesn't exist
+    OUTPUT_DIR.mkdir(exist_ok=True)
+    print(f"Playlists will be saved to: {OUTPUT_DIR}\n")
 
     tasks = [(chart, music_library) for chart in chart_files]
     
