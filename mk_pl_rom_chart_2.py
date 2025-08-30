@@ -1,12 +1,12 @@
 """
-generate music playlists from the music library (Optimized Version for CSV)
+generate music playlists from the music library (Optimized Version for CSV with Album Priority)
 """
 import time
 from pathlib import Path
 from tinytag import TinyTag
 from multiprocessing import Pool, cpu_count
 import sys
-import csv  # MODIFIED: Import the csv module
+import csv
 
 # --- Configuration ---
 # Set the root directory of your music library
@@ -21,6 +21,21 @@ EXCLUSION_PATTERNS = {
     "Perception-", "-We.", "Live B-", "Live At ", "Live On King ", "Intermission -",
     "Evil-2-", "Evil-02-", "Heart-02-", "Line-02-", "game-ost", " live "
 }
+
+def get_album_priority(album_name: str) -> int:
+    """
+    Assigns a priority score to a track based on its album name.
+    Lower scores are higher priority.
+    - 0: Studio Album (Default)
+    - 1: Greatest Hits / Best Of
+    - 2: Billboard Hits
+    """
+    lower_album = album_name.lower()
+    if 'billboard hits' in lower_album:
+        return 2
+    if 'greatest hits' in lower_album or 'best of' in lower_album:
+        return 1
+    return 0 # Default priority for studio albums
 
 def process_file(f_path: Path):
     """
@@ -38,11 +53,13 @@ def process_file(f_path: Path):
         if not tag.artist or not tag.title:
             return None
 
+        album = str.lower(tag.album or "")
         return {
             "f_path": path_str,
             "artist": str.lower(tag.artist),
             "title": str.lower(tag.title),
-            "album": str.lower(tag.album or ""),  # Handle cases where album tag is None
+            "album": album,
+            "priority": get_album_priority(album) # MODIFIED: Add priority score
         }
     except Exception:
         # Gracefully handle any errors from TinyTag or file system
@@ -51,37 +68,38 @@ def process_file(f_path: Path):
 def build_music_lookup(root_path: Path):
     """
     Scans the music library in parallel and builds a fast lookup dictionary.
-    The dictionary key is (artist, title) for O(1) access.
+    If a duplicate song is found, it keeps the one with the highest priority (lowest score).
     """
     print("🔎 Scanning for music files...")
-    # Find all potential files first
     files_to_process = list(root_path.rglob("*.[mf][4l][a]*"))
     print(f"Found {len(files_to_process)} potential files. Reading tags (using {cpu_count()} cores)...")
 
     music_lookup = {}
-    # Use a multiprocessing pool to read file tags in parallel
     with Pool(processes=cpu_count()) as pool:
-        # pool.map distributes the 'files_to_process' list among worker processes
         results = pool.map(process_file, files_to_process)
 
-    print("✅ Tag reading complete. Building library lookup table...")
+    print("✅ Tag reading complete. Building prioritized library lookup table...")
     for track_data in results:
         if track_data:
             key = (track_data["artist"], track_data["title"])
-            # Only add the first encountered version of a track
-            if key not in music_lookup:
-                music_lookup[key] = {
-                    "f_path": track_data["f_path"],
-                    "album": track_data["album"]
-                }
+            
+            # --- MODIFIED: Prioritization Logic ---
+            # If we've already stored this song, check if the new one is better
+            if key in music_lookup:
+                # If the new track has a lower (better) priority, replace the old one
+                if track_data["priority"] < music_lookup[key]["priority"]:
+                    music_lookup[key] = track_data
+            else:
+                # If it's a new song, just add it
+                music_lookup[key] = track_data
+
     return music_lookup
 
 def generate_playlist(args):
     """
     Worker function to generate a single M3U playlist from a chart file.
-    Designed to be called by a multiprocessing Pool.
     """
-    chart_path, music_lookup = args  # Unpack arguments
+    chart_path, music_lookup = args
     playlist_name = chart_path.stem
     playlist_file_path = CHART_DIR / f"{playlist_name}.m3u"
     
@@ -90,24 +108,19 @@ def generate_playlist(args):
     found_tracks = []
     try:
         with open(chart_path, "r", encoding="utf-8") as source_file:
-            # MODIFIED: Use a csv.reader for robust parsing
             chart_reader = csv.reader(source_file)
             for row in chart_reader:
                 try:
-                    # Assumes artist is in the first column, title in the second
                     line_artist, line_title = row[0].strip(), row[1].strip()
                     search_key = (str.lower(line_artist), str.lower(line_title))
                     
-                    # This is the O(1) lookup - fast and efficient!
                     track = music_lookup.get(search_key)
                     
                     if track and " live " not in track["album"]:
                         found_tracks.append(track["f_path"])
                 except IndexError:
-                    # Skip empty or malformed rows in the CSV file
                     continue
         
-        # Write all found tracks to the playlist file at once
         if found_tracks:
             with open(playlist_file_path, "w", encoding="utf-8") as f_out:
                 f_out.write("\n".join(found_tracks) + "\n")
@@ -120,21 +133,16 @@ def main():
     """Main function to orchestrate the playlist generation."""
     start = time.perf_counter()
     
-    # 1. Build the music library lookup table efficiently
     music_library = build_music_lookup(MUSIC_ROOT)
-    print(f"📚 Library built with {len(music_library)} unique tracks.\n")
+    print(f"📚 Library built with {len(music_library)} prioritized unique tracks.\n")
     
-    # 2. Get the list of chart files to process
-    # MODIFIED: Look for .csv files instead of .txt
     chart_files = list(CHART_DIR.glob('*.csv'))
     if not chart_files:
         print("No chart files (.csv) found in the specified directory. Exiting.")
         return
 
-    # 3. Prepare arguments for parallel processing
     tasks = [(chart, music_library) for chart in chart_files]
     
-    # 4. Generate all playlists in parallel
     print(f"Starting playlist generation for {len(chart_files)} charts (using {cpu_count()} cores)...")
     with Pool(processes=cpu_count()) as pool:
         pool.map(generate_playlist, tasks)
