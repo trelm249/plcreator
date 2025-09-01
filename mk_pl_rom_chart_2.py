@@ -21,7 +21,8 @@ EXCLUSION_PATTERNS = {
     "Iron Maiden-A Real", "Iron Maiden-Live", "Classical Conspiracy", "Instrumental",
     "Ozzy Osbourne-Tribute", "Magnification", "Disc 2 - Live", "Demo", "Mix",
     "Perception-", "-We.", "Live B-", "Live At ", "Live On King ", "Intermission -",
-    "Evil-2-", "Evil-02-", "Heart-02-", "Line-02-", "game-ost", " live "
+    "Evil-2-", "Evil-02-", "Heart-02-", "Line-02-", "game-ost", " live ",
+    "Saints & Sinners"
 }
 
 def get_album_priority(album_name: str) -> int:
