@@ -23,7 +23,7 @@ EXCLUSION_PATTERNS = {
     "Perception-", "-We.", "Live B-", "Live At ", "Live On King ", "Intermission -",
     "Evil-2-", "Evil-02-", "Heart-02-", "Line-02-", "game-ost", " live ",
     "Saints & Sinners", "Armageddon_", "Halloween Jams-", "Halloween-01",
-    "Park-Live","Park-One", "U2-Under", "U2-Live"
+    "Park-Live","Park-One", "U2-Under", "U2-Live", "1980-1990"
 }
 
 def get_album_priority(album_name: str) -> int:
