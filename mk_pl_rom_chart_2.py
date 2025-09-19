@@ -23,7 +23,7 @@ EXCLUSION_PATTERNS = {
     "Perception-", "-We.", "Live B-", "Live At ", "Live On King ", "Intermission -",
     "Evil-2-", "Evil-02-", "Heart-02-", "Line-02-", "game-ost", " live ",
     "Saints & Sinners", "Armageddon_", "Halloween Jams-", "Halloween-01",
-    "Park-Live","Park-One", "U2-Under", "U2-Live", "1980-1990"
+    "Park-Live","Park-One", "U2-Under", "U2-Live", "1980-1990", "boxed set"
 }
 
 def get_album_priority(album_name: str) -> int:
@@ -35,7 +35,7 @@ def get_album_priority(album_name: str) -> int:
     - 2: Billboard Hits
     """
     lower_album = album_name.lower()
-    if 'billboard ' in lower_album or 'show and tell' in lower_album:
+    if 'billboard ' in lower_album or 'show and tell' in lower_album or 'right here, right now' in lower_album:
         return 2
     if 'greatest hits' in lower_album or 'best of' in lower_album or 'red, white' in lower_album:
         return 1
