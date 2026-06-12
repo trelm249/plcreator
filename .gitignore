@@ -1,1 +1,15 @@
-greatest-billboards-top-song*
+# opencode local state (plugins, extensions, permissions)
+.opencode/
+
+# generated playlist files
+*.m3u
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# virtual environments
+.venv/
+venv/
+.env

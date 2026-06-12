@@ -24,21 +24,22 @@ The Beatles,Hey Jude
 ## Available Playlists
 
 ### By Decade
-- `greatest-songs-1960s.csv` - Greatest songs from the 1960s
-- `greatest-songs-1970s.csv` - Greatest songs from the 1970s
-- `greatest-songs-1980s.csv` - Greatest songs from the 1980s
-- `greatest-songs-1990s.csv` - Greatest songs from the 1990s
-- `greatest-songs-2000s.csv` - Greatest songs from the 2000s
-- `greatest-songs-2010s.csv` - Greatest songs from the 2010s
+
+Curation decisions are focused on:
+
+- year released
+- popularity based on airplay and purchases as tracked by applicable charts
+- decade defining and cultural significance.
 
 ### By Genre
-- `alternative-hits.csv` - Alternative rock hits
-- `greatest-classic-rock-songs.csv` - Classic rock essentials
-- `greatest-metal-songs.csv` - Heavy metal classics
-- `hair-band-hits.csv` - Hair metal and glam rock hits
-- `prog-rock.csv` - Progressive rock masterpieces
-- `prog-metal.csv` - Progressive metal tracks
-- `southernBoogie.csv` - Southern rock and boogie
+
+Curation decisions are focused on:
+
+- seen as defining the genre 
+- popularity based on airplay and purchases as tracked by applicable charts
+- influence within the genre
+- tracks the cross into the genre from genre adjacent groups
+- notable deep tracks are welcome
 
 ### Special Collections
 - `cathedrals-and-cataclysms.csv` - Curated thematic collection
@@ -47,8 +48,9 @@ The Beatles,Hey Jude
 
 1. Edit or create a CSV file with your desired artist and track combinations
 2. Ensure each line follows the format: `Artist Name,Track Title`
-3. Run the Python script to generate the corresponding `.m3u` playlist file
-4. Import the generated playlist into your preferred music player
+3. Copy the CSV to `~/plcharts/` (the directory `mk_pl_from_chart.py` reads from)
+4. Run `python mk_pl_from_chart.py` from your playlists directory to generate `.m3u` files
+5. Import the generated playlist into your preferred music player
 
 ## File Naming Convention
 
