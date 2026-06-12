@@ -42,6 +42,7 @@ Curation criteria: year released, popularity (airplay and sales), and cultural s
 - `hair-band-hits.csv` — Hair metal and glam rock hits
 - `prog-rock.csv` — Progressive rock masterpieces
 - `prog-metal.csv` — Progressive metal tracks
+- `blues-greats.csv` — Blues and blues-rock guitar greats
 - `southernBoogie.csv` — Southern rock and boogie
 
 Curation criteria: genre-defining tracks, popularity, influence, cross-genre adjacency, proto and pioneer artists, and notable deep cuts.
