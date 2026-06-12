@@ -47,7 +47,10 @@ Curation criteria: year released, popularity (airplay and sales), and cultural s
 Curation criteria: genre-defining tracks, popularity, influence, cross-genre adjacency, and notable deep cuts.
 
 ### Special Collections
+
 - `cathedrals-and-cataclysms.csv` - Curated thematic collection
+- `K-Jams.csv` - eclectic listening mix
+- `saphile-pl.csv` - sing-a-long driving mix
 
 ## Usage
 
