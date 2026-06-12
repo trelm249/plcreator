@@ -25,21 +25,26 @@ The Beatles,Hey Jude
 
 ### By Decade
 
-Curation decisions are focused on:
+- `greatest-songs-1960s.csv` — Greatest songs from the 1960s
+- `greatest-songs-1970s.csv` — Greatest songs from the 1970s
+- `greatest-songs-1980s.csv` — Greatest songs from the 1980s
+- `greatest-songs-1990s.csv` — Greatest songs from the 1990s
+- `greatest-songs-2000s.csv` — Greatest songs from the 2000s
+- `greatest-songs-2010s.csv` — Greatest songs from the 2010s
 
-- year released
-- popularity based on airplay and purchases as tracked by applicable charts
-- decade defining and cultural significance.
+Curation criteria: year released, popularity (airplay and sales), and cultural significance.
 
 ### By Genre
 
-Curation decisions are focused on:
+- `alternative-hits.csv` — Alternative rock hits
+- `greatest-classic-rock-songs.csv` — Classic rock essentials
+- `greatest-metal-songs.csv` — Heavy metal classics
+- `hair-band-hits.csv` — Hair metal and glam rock hits
+- `prog-rock.csv` — Progressive rock masterpieces
+- `prog-metal.csv` — Progressive metal tracks
+- `southernBoogie.csv` — Southern rock and boogie
 
-- seen as defining the genre 
-- popularity based on airplay and purchases as tracked by applicable charts
-- influence within the genre
-- tracks the cross into the genre from genre adjacent groups
-- notable deep tracks are welcome
+Curation criteria: genre-defining tracks, popularity, influence, cross-genre adjacency, and notable deep cuts.
 
 ### Special Collections
 - `cathedrals-and-cataclysms.csv` - Curated thematic collection
