@@ -38,13 +38,13 @@ Curation criteria: year released, popularity (airplay and sales), and cultural s
 
 - `alternative-hits.csv` — Alternative rock hits
 - `greatest-classic-rock-songs.csv` — Classic rock essentials
-- `greatest-metal-songs.csv` — Heavy metal classics
+- `greatest-metal-songs.csv` — Heavy metal and hard rock classics
 - `hair-band-hits.csv` — Hair metal and glam rock hits
 - `prog-rock.csv` — Progressive rock masterpieces
 - `prog-metal.csv` — Progressive metal tracks
 - `southernBoogie.csv` — Southern rock and boogie
 
-Curation criteria: genre-defining tracks, popularity, influence, cross-genre adjacency, and notable deep cuts.
+Curation criteria: genre-defining tracks, popularity, influence, cross-genre adjacency, proto and pioneer artists, and notable deep cuts.
 
 ### Special Collections
 
