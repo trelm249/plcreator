@@ -1,5 +1,6 @@
 # opencode local state (plugins, extensions, permissions)
 .opencode/
+AGENTS.md
 
 # generated playlist files
 *.m3u
