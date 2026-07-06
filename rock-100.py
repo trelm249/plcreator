@@ -3,7 +3,6 @@ billboard rock 100 playlist
 """
 from pathlib import Path
 from tinytag import TinyTag
-import multipprocessing
 import time
 import billboard
 
@@ -36,7 +35,7 @@ cyears = [
 def year_end_tracks_generator(current_chart, current_year):
     chart = billboard.ChartData(current_chart, year=current_year)
     red_tracks = set()
-    this_playlist = open(f"{current_chart}.m3u", "a", encoding="utf-8")
+    this_playlist = open(f"{current_chart}.m3u", "w", encoding="utf-8")
     file_array = []
     search_path = Path("../").rglob("*.[mf][4l][a]*")
     for f_path in search_path:
@@ -62,7 +61,7 @@ def year_end_tracks_generator(current_chart, current_year):
             for tr_path in file_array:
                 tr_artist = str.lower(track_artist)
                 if (
-                    tr_path["tag_artist"] in tr_artist
+                    tr_artist in tr_path["tag_artist"]
                     and str.lower(track_title) in tr_path["tag_title"]
                 ):
                     this_playlist.write(str(str(tr_path["f_path"]) + "\n"))
