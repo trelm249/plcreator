@@ -392,7 +392,7 @@ all_entries_raw = hot100 + mainstream_rock + alt_airplay
 seen: set[tuple[str, str]] = set()
 unique: list[tuple[str, str]] = []
 
-for artist, song in all_entries_raw:
+for song, artist in all_entries_raw:
     key = (normalize(artist), normalize(song))
     if key not in seen:
         seen.add(key)
