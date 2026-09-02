@@ -37,9 +37,9 @@ def get_album_priority(album_name: str) -> int:
     - 2: Billboard Hits
     """
     lower_album = album_name.lower()
-    if 'billboard ' in lower_album or 'show and tell' in lower_album or 'right here, right now' in lower_album:
+    if 'billboard ' in lower_album or 'show and tell' in lower_album or 'right here, right now' in lower_albumi or 'alchemy' in lower_album:
         return 2
-    if 'greatest hits' in lower_album or 'best of' in lower_album or 'red, white' in lower_album or 'platinum hits' in lower_album or 'the essential' in lower_album:
+    if 'greatest hits' in lower_album or 'best of' in lower_album or 'red, white' in lower_album or 'platinum hits' in lower_album or 'essential' in lower_album:
         return 1
     return 0 # Default priority for studio albums
 
