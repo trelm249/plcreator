@@ -7,6 +7,8 @@ from tinytag import TinyTag
 from multiprocessing import Pool, cpu_count
 import sys
 import csv
+import re
+import unicodedata
 
 # --- Configuration ---
 # Set the root directory of your music library
@@ -27,6 +29,26 @@ EXCLUSION_PATTERNS = {
     "Apollo-Live", "Symphony-02", "Nightwish-Showtime", "Beautiful-03",
     "Beautiful-02", "Glen Frey Live"
 }
+
+_ARTICLES = {"the", "a", "an"}
+_PAREN_RE = re.compile(r"[\(\[].*?[\)\]]")
+_FEAT_RE = re.compile(r"\b(featuring|feat|ft)\b")
+_NON_ALNUM_RE = re.compile(r"[^a-z0-9]+")
+
+def normalize_text(text: str) -> str:
+    """
+    Normalize an artist or title so chart spellings can match audio tags.
+    Folds accents, treats '&' as 'and', drops parenthetical/bracketed
+    qualifiers, unifies featured-artist markers, and ignores punctuation
+    and articles ('the', 'a', 'an').
+    """
+    text = unicodedata.normalize("NFKD", text)
+    text = "".join(ch for ch in text if not unicodedata.combining(ch))
+    text = text.lower().replace("&", " and ")
+    text = _PAREN_RE.sub(" ", text)
+    text = _FEAT_RE.sub(" feat ", text)
+    text = _NON_ALNUM_RE.sub(" ", text)
+    return " ".join(word for word in text.split() if word not in _ARTICLES)
 
 def get_album_priority(album_name: str) -> int:
     """
@@ -95,6 +117,17 @@ def build_music_lookup(root_path: Path):
             else:
                 music_lookup[key] = track_data
 
+    # Add normalized alias keys so chart spellings can match tag spellings.
+    for track_data in list(music_lookup.values()):
+        alias_artist = normalize_text(track_data["artist"])
+        alias_title = normalize_text(track_data["title"])
+        if not alias_artist and not alias_title:
+            continue
+        alias_key = ("~norm~", alias_artist, alias_title)
+        existing = music_lookup.get(alias_key)
+        if existing is None or track_data["priority"] < existing["priority"]:
+            music_lookup[alias_key] = track_data
+
     return music_lookup
 
 def generate_playlist(args):
@@ -109,18 +142,27 @@ def generate_playlist(args):
     sys.stdout.write(f"🎧 Generating playlist: {playlist_name}.m3u\n")
     
     found_tracks = []
+    seen_paths = set()
     try:
         with open(chart_path, "r", encoding="utf-8") as source_file:
             chart_reader = csv.reader(source_file)
             for row in chart_reader:
                 try:
                     line_artist, line_title = row[0].strip(), row[1].strip()
-                    search_key = (str.lower(line_artist), str.lower(line_title))
-                    
-                    track = music_lookup.get(search_key)
-                    
+
+                    track = music_lookup.get((line_artist.lower(), line_title.lower()))
+                    if track is None:
+                        track = music_lookup.get((
+                            "~norm~",
+                            normalize_text(line_artist),
+                            normalize_text(line_title),
+                        ))
+
                     if track and " live " not in track["album"]:
-                        found_tracks.append(track["f_path"])
+                        f_path = track["f_path"]
+                        if f_path not in seen_paths:
+                            seen_paths.add(f_path)
+                            found_tracks.append(f_path)
                 except IndexError:
                     continue
         
