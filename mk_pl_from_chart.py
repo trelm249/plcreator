@@ -50,6 +50,29 @@ def normalize_text(text: str) -> str:
     text = _NON_ALNUM_RE.sub(" ", text)
     return " ".join(word for word in text.split() if word not in _ARTICLES)
 
+_LIVE_TITLE_RE = re.compile(
+    r"[\(\[]\s*live\b"                                       # (live...), [live...]
+    r"|\blive\s+(?:version|at|from|in|on|recording|session)\b"
+    r"|\s[-\u2013]\s*live\b"                                 # " - live"
+)
+_LIVE_ALBUM_RE = re.compile(
+    r"\blive\b\s*$"                                          # "... Live"
+    r"|^\s*live\s*(?:[!\-\u2013/]|\d|$)"                     # "Live", "Live!", "Live 1975"
+    r"|\blive\s+(?:at|from|on|in)\b"                         # "Live at/from/on/in ..."
+)
+
+def is_live(album: str, title: str) -> bool:
+    """
+    Return True if the album or title marks the track as a live recording.
+    Deliberately avoids matching words like 'alive' or song titles such as
+    'Live To Tell', 'Live and Let Die', or 'Wanted Dead Or Alive'.
+    """
+    album = (album or "").lower()
+    title = (title or "").lower()
+    if " live " in album:
+        return True
+    return bool(_LIVE_ALBUM_RE.search(album) or _LIVE_TITLE_RE.search(title))
+
 def get_album_priority(album_name: str) -> int:
     """
     Assigns a priority score to a track based on its album name.
@@ -82,12 +105,15 @@ def process_file(f_path: Path):
             return None
 
         album = str.lower(tag.album or "")
+        title = str.lower(tag.title)
+        live = is_live(album, title)
         return {
             "f_path": path_str,
             "artist": str.lower(tag.artist),
-            "title": str.lower(tag.title),
+            "title": title,
             "album": album,
-            "priority": get_album_priority(album)
+            "priority": get_album_priority(album) + (100 if live else 0),
+            "live": live
         }
     except Exception:
         # Gracefully handle any errors from TinyTag or file system
@@ -158,7 +184,7 @@ def generate_playlist(args):
                             normalize_text(line_title),
                         ))
 
-                    if track and " live " not in track["album"]:
+                    if track and not track.get("live"):
                         f_path = track["f_path"]
                         if f_path not in seen_paths:
                             seen_paths.add(f_path)
